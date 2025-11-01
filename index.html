@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="FantasyWorld: Geometry-Consistent World Modeling via Unified Video and 3D Prediction">
+  <meta name="keywords" content="Video Generation, Diffusion Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- More research下拉菜单 开始 -->
+  <div style="width:100%; display: flex; justify-content: center; align-items: center; margin-top: 20px; position: relative; z-index: 100;">
+    <div style="position: relative; display:inline-block;">
+      <button id="moreResearchBtn" style="background-color: #fff; color: #333; padding: 10px 24px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer;">
+        More research ▼
+      </button>
+      <div id="moreResearchDropdown" style="display: none; position: absolute; left: 0; top: 110%; background: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow:0 6px 12px rgba(0,0,0,0.1); min-width: 180px; z-index: 999;">
+        <a href="https://fantasy-amap.github.io/fantasy-id/" target="_blank" style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyID</a>
+        <a href="https://fantasy-amap.github.io/fantasy-talking/" target="_blank" style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyTalking</a>
+        <a href="https://fantasy-amap.github.io/fantasy-portrait/" target="_blank" style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyPortrait</a>
+        <a href="https://fantasy-amap.github.io/fantasy-talking2/" target="_blank" style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyTalking2</a>
+      </div>
+    </div>
+  </div>
+  <!-- More research下拉菜单 结束 -->
+  <script>
+    // 简单的下拉菜单JS逻辑
+    const btn = document.getElementById('moreResearchBtn');
+    const menu = document.getElementById('moreResearchDropdown');
+    btn.onclick = function(e) {
+      e.stopPropagation();
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    };
+    // 点击别处隐藏菜单
+    document.body.addEventListener('click', function() {
+      menu.style.display = 'none';
+    });
+  </script>
+  
+  <title>FantasyWorld: Geometry-Consistent World Modeling via Unified Video and 3D Prediction</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <style>
+    /* Dark theme styles */
+    body {
+      background-color:  #0a0a0a;
+      color: #ffffff;
+    }
+    .title, .subtitle, .content, .publication-title {
+      color: #ffffff !important;
+    }
+    .hero.is-light {
+      background-color: #1a1a1a !important;
+      color: #ffffff !important;
+    }
+    .section {
+      background-color: #0a0a0a;
+    }
+    .footer {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+    .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+      color: #ffffff;
+    }
+    pre {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+    code {
+      background-color: #2a2a2a;
+      color: #ffffff;
+    }
+    .has-text-justified {
+      color: #ffffff;
+    }
+    .hero {
+      margin-top: 10rem;
+      background-color: #0a0a0a !important;
+    }
+    .hero-transparent {
+      position: relative;
+      z-index: 2;
+      margin-top: 0vh;
+      background-color: transparent !important;
+    }
+    .hero, .hero-body, .hero.is-small {
+      background-color: #0a0a0a !important;
+    }
+    html {
+      background-color: #0a0a0a !important;
+    }
+    .column-spacing {
+      margin: 0 2rem !important;
+    }
+    .video-description {
+      min-height: 4.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .prompt-wrap {
+      position: relative;
+    }
+
+    .prompt {
+      max-width: calc(100% - 20px);
+      position: absolute;
+      background: rgba(0,0,0,0.1);
+      color: rgba(255,255,255,0.9);
+      font-size: 12px;
+      backdrop-filter: blur(10px);
+      bottom: 10px;
+      left: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+      line-height: 1.4;
+      
+    }
+
+    .prompt-wrap:hover .prompt {
+      opacity: 1;
+      pointer-events: all;
+    }
+  </style>
+  
+  <style>
+    .carousel {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+      font-size: 0; /* Remove any potential inline-block spacing */
+    }
+    
+    .carousel::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    .prompt-wrap-main {
+      flex: 0 0 auto;
+      height: 180px;
+      position: relative;
+      font-size: 16px; /* Reset font size for content */
+      display: flex; /* Use flexbox to center the video */
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+    }
+
+    .prompt-wrap-main video {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+      display: block; /* Remove any potential inline spacing */
+      margin: 0; /* Remove any margins */
+    }
+
+    .results-carousel {
+      padding: 0;
+      white-space: nowrap; /* Prevent wrapping */
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero-transparent">
+  <div class="column has-text-centered" style="margin-top: 0rem; ">
+    <h1 class="title is-1 publication-title mb-1" style="background: transparent !important; text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8); color: white;">FantasyWorld</h1>
+    <h2 class="subtitle has-text-centered mt-1" style="background: transparent !important; color: white;">Geometry-Consistent World Modeling via Unified Video and 3D Prediction</h2>
+    
+    <div class="is-size-5 publication-authors" style="background: transparent !important; ">
+      <span class="author-block" style="background: transparent !important;">
+        Yixiang Dai<sup style="color: rgb(255, 255, 255);">1*§&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
+      </span>
+      <span class="author-block" style="background: transparent !important;">
+        Fan Jiang<sup style="color: white;">1*†‡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
+      </span>
+      <span class="author-block" style="background: transparent !important;">
+        Chiyu Wang<sup style="color: white;">1*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
+      </span>
+
+
+      <div class="is-size-5 publication-authors" style="background: transparent !important;">
+        <span class="author-block" style="background: transparent !important;">
+            Mu Xu<sup style="color: white;">2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
+          </span>
+          <span class="author-block" style="background: transparent !important;">
+           YongGang Qi<sup style="color: white;">2‡&nbsp;&nbsp;</sup>
+          </span>
+      </div>
+    </div>  
+
+
+
+    <div class="is-size-5 publication-authors" style="background: transparent !important;">
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">1</sup>AMAP,&nbsp;&nbsp;&nbsp;Alibaba Group</span><br>
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">2</sup>Beijing University of Posts and Telecommunications</span><br>
+    </div>
+
+    <div class="is-size-5 publication-authors" style="background: transparent !important;">
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">*</sup>Equal contribution&nbsp;&nbsp;</span>
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">†</sup>Project leader&nbsp;&nbsp;</span>
+      
+    </div>
+
+    <div class="is-size-5 publication-authors" style="background: transparent !important;">
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">‡</sup>Corresponding author&nbsp;&nbsp;</span>
+      <span class="author-block" style="background: transparent !important; color: white;"><sup style="color: white;">§</sup>Work done during internship at AMAP, Alibaba Group&nbsp;&nbsp;</span>
+
+    </div>
+    <div class="column has-text-centered">
+        <div class="publication-links">
+          <!-- PDF Link. -->
+          <!-- todo: add paper url and code url   -->
+          <span class="link-block">
+            <a href="https://arxiv.org/abs/2509.21657"
+               class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                  <i class="ai ai-arxiv"></i>
+              </span>
+              <span>arXiv</span>
+            </a>
+          </span>
+          <!-- Code Link. -->
+          <span class="link-block">
+            <a href="https://github.com/Fantasy-AMAP/fantasy-world"
+               class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                  <i class="fab fa-github"></i>
+              </span>
+              <span>Code Coming Soon</span>
+              </a>
+          </span>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" style="margin-top: 10rem;">
+  <div class="container is-max-desktop">
+      <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <!-- todo:need add youtube url   -->
+        <iframe 
+          src="https://www.youtube.com/embed/_gLKZL5ytEo"          
+          title="YouTube video player" 
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    <div class="columns is-centered has-text-centered"style="margin-top: 30px;">
+      <div class="column is-four-fifths">
+      <h2 class="title is-3">Abstract </h2>
+      </div>
+    </div> 
+    <div class="columns is-vcentered" style="margin-top: 3rem;">
+        <div class="content has-text-justified">
+          <p>
+            High-quality 3D world models are pivotal for embodied intelligence and Artificial General Intelligence (AGI), underpinning applications such as AR/VR content creation and robotic navigation. Despite the established strong imaginative priors, current video foundation models lack explicit 3D grounding capabilities, thus being limited in both spatial consistency and their utility for downstream 3D reasoning tasks. In this work, we present FantasyWorld, a geometry-enhanced framework that augments frozen video foundation models with a trainable geometric branch, enabling joint modeling of video latents and an implicit 3D field in a single forward pass. Our approach introduces cross-branch supervision, where geometry cues guide video generation and video priors regularize 3D prediction, thus yielding consistent and generalizable 3D-aware video representations. Notably, the resulting latents from the geometric branch can potentially serve as versatile representations for downstream 3D tasks such as novel view synthesis and navigation, without requiring per-scene optimization or fine-tuning. Extensive experiments show that FantasyWorld effectively bridges video imagination and 3D perception, outperforming recent geometry-consistent baselines in multi-view coherence and style consistency. Ablation studies further confirm that these gains stem from the unified backbone and cross-branch information exchange.
+            <!-- <a href="https://www.hedra.com/">https://www.hedra.com/</a>, with examples at 
+            <a href="https://magicinfinite.github.io/">https://magicinfinite.github.io/</a>. -->
+          </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" >
+  <div class="container is-max-desktop" style="margin-top: -6rem;">
+    <div class="columns is-centered has-text-centered"style="margin-top: 100px;">
+      <div class="column is-four-fifths">
+      <h2 class="title is-3">Overview </h2>
+      <div class="container" style="max-width: 100%; margin-top: 60px">
+      <img src="./assets/overview.png" alt="Full Body">
+      <!-- <div id="results-carousel" class="carousel results-carousel"> -->
+        <!-- <div class="item item-fullbody"> -->
+          <!-- <img src="./static/arxiv_method.jpg" alt="Full Body"> -->
+        <!-- </div> -->
+        <!--  -->
+      <!-- </div> -->
+    </div>
+      </div>
+    </div> 
+    <div class="columns is-vcentered" style="margin-top: 3rem;">
+        <div class="content has-text-justified">
+          <p>
+            FantasyWorld is a unified feed-forward model for joint video and 3D scene generation. The front end employs Preconditioning Blocks (PCBs) that reuse the frozen
+WanDiT denoiser to supply partially denoised latents, ensuring the geometry pathway operates on meaningful features rather than pure noise. The backbone then consists of stacked Integrated Reconstruction and Generation (IRG) Blocks, which iteratively refine video latents and geometry fea-
+tures under multimodal conditioning. Each IRG block contains an asymmetric dual-branch structure: an Imagination Prior Branch for appearance synthesis and a Geometry-Consistent
+Branch for explicit 3D reasoning, coupled through lightweight adapters and cross attention.
+          </p>
+        </div>
+    </div>
+  </div>
+</section>
+
+<style>
+    #results-carousel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .prompt-wrap {
+      width: 50%; /* 设置每个视频占总宽度的32%，以确保每行显示3个 */
+      margin-bottom: 1rem; /* 设置每行视频之间的间距 */
+    }
+  
+    video {
+      width: 100%; /* 视频占满父容器的宽度 */
+      height: auto; /* 保持视频的原始比例 */
+    }
+
+  </style>
+
+<section class="section">
+  <div class="hero-body">
+    <!-- <div class="container" style="max-width: 50%;"> -->
+    <div class="columns is-centered has-text-centered">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Our Results</h2>
+      <!-- <p> FantasyWorld can generate explorable and geometrically consistent 3D scenes by integrating video priors and geometric grounding.  </p> -->
+    </div>  
+    </div>
+  </div> 
+</section>
+
+
+  <!-- <div class="container" style="max-width: 60%;"> -->
+  <div class="container is-max-desktop">
+    <div class="hero-body" style="margin-top: 1rem;">
+      <div class="container" style="max-width: 100%;">
+        <!-- <video poster="" autoplay controls muted loop playsinline> -->
+            <!-- <source src="./static/magic_human_video/long_video/case1.mp4" -->
+                    <!-- type="video/mp4"> -->
+        <!-- </video> -->
+        <!-- <h3 class="title is-4"></h3>  -->
+        <div id="results-carousel" class="results-carousel" style="margin-top: -1.3rem;">
+          <div class="prompt-wrap">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_1.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_1.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_2.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_2.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_5.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_5.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_6.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_6.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_8.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_8.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/video_9.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/pc_9.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</section>
+
+<section class="section">
+  <div class="hero-body">
+    <!-- <div class="container" style="max-width: 50%;"> -->
+    <div class="columns is-centered has-text-centered">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Comparison</h2>
+      <p> Our experiments show that the generated videos not only maintain strong visual realism but also achieve higher multi-view coherence and improved geometric fidelity compared to existing methods.  </p>
+    </div>  
+    </div>
+  </div> 
+</section>
+
+
+<style>
+    /* 新增Comparison部分样式 */
+    #new-carousel-container {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        
+    }
+
+    .new-layout-item {
+        display: none;
+    }
+
+    .new-layout-item.active {
+        display: block;
+    }
+
+    .top-content {
+        display: flex;
+        gap: 0px;;
+    }
+
+    .image-container {
+        flex: 0 0 300px;
+    }
+
+    .image-container img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .description-container {
+        flex: 1;
+        FantasyWorld: #030303;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .three-videos {
+        margin-top: 5px;
+        background-color: #0a0a0a;
+    }
+
+    .bottom-text {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: bold;
+        background-color: #0a0a0a;
+    }
+
+
+    /* 分页点样式 */
+    #new-pagination-dots {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .new-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #000000;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .new-dot.active {
+        background: #ffffff;
+    }
+</style>
+
+<section class="is-light is-small">
+    <div class="hero-body">
+        <div class="container">
+            <div id="new-carousel-container" class="carousel-container">
+                <!-- 导航按钮 -->
+                <div class="new-layout-nav prev">❮</div>
+                <div class="new-layout-nav next">❯</div>
+                
+                <!-- 第一页内容 -->
+                <div class="new-layout-item active">
+                    <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/aether/video_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">AETHER</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/voyager/video_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Voyager</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/uni3c/video_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Uni3C</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dual-block">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain" class="idAnimator-video">
+                                    <source src="./assets/wonderworld/video_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">WonderWorld</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain" class="idAnimator-video">
+                                    <source src="./assets/fantasyworld/video_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">FantasyWorld</p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="new-layout-item">
+                      <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/aether/pc_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">AETHER</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/voyager/pc_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Voyager</p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/uni3c/pc_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Uni3C</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/fantasyworld/pc_1.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">FantasyWorld</p>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <div class="new-layout-item">
+                    <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/aether/video_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">AETHER</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/voyager/video_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Voyager</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/uni3c/video_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Uni3C</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dual-block">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain" class="idAnimator-video">
+                                    <source src="./assets/wonderworld/video_2.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">WonderWorld</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain" class="idAnimator-video">
+                                    <source src="./assets/fantasyworld/video_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">FantasyWorld</p>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="new-layout-item">
+                      <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/aether/pc_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">AETHER</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/voyager/pc_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Voyager</p>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="three-videos">
+                        <div class="video-row">
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/uni3c/pc_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">Uni3C</p>
+                            </div>
+                            <div class="video-item">
+                                <video autoplay controls muted loop playsinline style="object-fit: contain">
+                                    <source src="./assets/fantasyworld/pc_3.mp4" type="video/mp4">
+                                </video>
+                                <p class="bottom-text">FantasyWorld</p>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <!-- 可以添加更多new-layout-item作为其他比较案例 -->
+            </div>
+
+            <!-- 分页点 -->
+            <div id="new-pagination-dots"></div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    // 初始化新的轮播组件
+    document.addEventListener("DOMContentLoaded", function() {
+        const newItems = document.querySelectorAll('.new-layout-item');
+        const newDotsContainer = document.getElementById('new-pagination-dots');
+        let currentNewIndex = 0;
+
+        // 创建分页点
+        newItems.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.className = 'new-dot';
+            if(index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => setNewSlide(index));
+            newDotsContainer.appendChild(dot);
+        });
+
+        const newDots = document.querySelectorAll('.new-dot');
+        const prevBtn = document.querySelector('.new-layout-nav.prev');
+        const nextBtn = document.querySelector('.new-layout-nav.next');
+
+        function setNewSlide(index) {
+            // 边界处理
+            if(index >= newItems.length) index = 0;
+            if(index < 0) index = newItems.length - 1;
+            
+            // 更新显示状态
+            newItems.forEach(item => item.classList.remove('active'));
+            newItems[index].classList.add('active');
+            
+            // 更新分页点
+            newDots.forEach(dot => dot.classList.remove('active'));
+            newDots[index].classList.add('active');
+            
+            currentNewIndex = index;
+        }
+
+        // 添加导航事件
+        prevBtn.addEventListener('click', () => setNewSlide(currentNewIndex - 1));
+        nextBtn.addEventListener('click', () => setNewSlide(currentNewIndex + 1));
+    });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const items = document.querySelectorAll('.carousel-item');
+    const paginationDotsContainer = document.getElementById('pagination-dots');
+
+
+    items.forEach((_, index) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (index === 0) {
+            dot.classList.add('active'); 
+        }
+        dot.addEventListener('click', () => {
+            currentSlide = index;
+            showSlide(currentSlide);
+        });
+        paginationDotsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('#pagination-dots .dot');
+
+    let currentSlide = 0;
+
+    function showSlide(index) {
+
+        if (index >= items.length) {
+            currentSlide = 0; 
+        } else if (index < 0) {
+            currentSlide = items.length - 1;  
+        } else {
+            currentSlide = index;
+        }
+
+
+        items.forEach((item, i) => {
+            item.classList.remove('active');
+            if (i === currentSlide) {
+                item.classList.add('active');
+            }
+        });
+
+
+        dots.forEach((dot, i) => {
+            dot.classList.remove('active');
+            if (i === currentSlide) {
+                dot.classList.add('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlide - 1);
+    }
+
+
+    document.querySelector('.layout-nav.prev').addEventListener('click', prevSlide);
+    document.querySelector('.layout-nav.next').addEventListener('click', nextSlide);
+
+
+    showSlide(currentSlide);
+
+
+    const newItems = document.querySelectorAll('.new-layout-item');
+    const newPaginationDotsContainer = document.getElementById('new-pagination-dots');
+
+
+    newItems.forEach((_, index) => {
+        const newDot = document.createElement('span');
+        newDot.classList.add('new-dot');
+        if (index === 0) {
+            newDot.classList.add('active'); 
+        }
+        newDot.addEventListener('click', () => {
+            currentNewSlide = index;
+            showNewSlide(currentNewSlide);
+        });
+        newPaginationDotsContainer.appendChild(newDot);
+    });
+
+    const newDots = document.querySelectorAll('#new-pagination-dots .new-dot');
+
+    let currentNewSlide = 0;
+
+    function showNewSlide(index) {
+
+        if (index >= newItems.length) {
+            currentNewSlide = 0;  
+        } else if (index < 0) {
+            currentNewSlide = newItems.length - 1; 
+        } else {
+            currentNewSlide = index;
+        }
+
+
+        newItems.forEach((item, i) => {
+            item.classList.remove('active');
+            if (i === currentNewSlide) {
+                item.classList.add('active');
+            }
+        });
+
+
+        newDots.forEach((newDot, i) => {
+            newDot.classList.remove('active');
+            if (i === currentNewSlide) {
+                newDot.classList.add('active');
+            }
+        });
+    }
+
+    function nextNewSlide() {
+        showNewSlide(currentNewSlide + 1);
+    }
+
+    function prevNewSlide() {
+        showNewSlide(currentNewSlide - 1);
+    }
+
+
+    document.querySelector('.new-layout-nav.prev').addEventListener('click', prevNewSlide);
+    document.querySelector('.new-layout-nav.next').addEventListener('click', nextNewSlide);
+
+
+    showNewSlide(currentNewSlide);
+});
+
+</script>
+
+
+<style>
+    #results-carousel2 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  
+    .prompt-wrap2 {
+      width: 25%; /* 设置每个视频占总宽度的32%，以确保每行显示3个 */
+      margin-bottom: 1rem; /* 设置每行视频之间的间距 */
+    }
+  
+    video {
+      width: 100%; /* 视频占满父容器的宽度 */
+      height: auto; /* 保持视频的原始比例 */
+    }
+
+  </style>
+  
+  <section class="section">
+  <div class="hero-body">
+    <!-- <div class="container" style="max-width: 50%;"> -->
+    <div class="columns is-centered has-text-centered">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3">Our Results on Large Viewpoint Variations</h2>
+      <p> FantasyWorld maintains multi-view consistency across significant viewpoint variations (e.g., 180-degree rotations).
+      </p>
+    </div>  
+    </div>
+  </div> 
+</section>
+
+  <!-- <div class="container" style="max-width: 60%;"> -->
+  
+    <div class="hero-body" style="margin-top: 1rem;">
+      <div class="container" style="max-width: 100%;">
+        <!-- <video poster="" autoplay controls muted loop playsinline> -->
+            <!-- <source src="./static/magic_human_video/long_video/case1.mp4" -->
+                    <!-- type="video/mp4"> -->
+        <!-- </video> -->
+        <!-- <h3 class="title is-4"></h3>  -->
+        <div id="results-carousel2" class="results-carousel2" style="margin-top: -1.3rem;">
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (1).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (2).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (3).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (4).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (5).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (6).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+          <div class="prompt-wrap2">
+            <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/fantasyworld/large_camera_motion/depth (7).mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div>
+
+          <!-- <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/25.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div> -->
+          
+          <!-- <div class="prompt-wrap">
+            <video poster="" autoplay controls muted loop playsinline>
+              <source src="./assets/28.mp4"
+                      type="video/mp4">
+            </video>
+            <div class="prompt"></div>
+          </div> -->
+
+        </div>
+      </div>
+      <!-- <div class="container" style="max-width: 80%;"> -->
+        <!-- <h3 class="title is-4"></h3>  -->
+        <!-- <div id="results-carousel" class="carousel results-carousel" style="margin-top: -1.3rem;"> -->
+          <!--  -->
+        <!-- </div> -->
+      <!-- </div> -->
+      
+
+    </div>
+  </div> 
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{dai2025fantasyworld,
+  title={FantasyWorld: Geometry-Consistent World Modeling via Unified Video and 3D Prediction},
+  author={Dai, Yixiang and Jiang, Fan and Wang, Chiyu and Xu, Mu and Qi, Yonggang},
+  journal={arXiv preprint arXiv:2509.21657},
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+</body>
+</html>
