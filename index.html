@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="description"
     content="FantasyWorld: Geometry-Consistent World Modeling via Unified Video and 3D Prediction">
-  <meta name="keywords" content="Video Generation, Diffusion Models">
+  <meta name="keywords" content="Video Generation, Diffusion Models, World Models">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- More research下拉菜单 开始 -->
@@ -18,31 +18,10 @@
       </button>
       <div id="moreResearchDropdown"
         style="display: none; position: absolute; left: 0; top: 110%; background: #fff; border: 1px solid #ccc; border-radius: 5px; box-shadow:0 6px 12px rgba(0,0,0,0.1); min-width: 180px; z-index: 999;">
-        <a href="https://fantasy-amap.github.io/fantasy-id/" target="_blank"
-          style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyID</a>
-        <a href="https://fantasy-amap.github.io/fantasy-talking/" target="_blank"
-          style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyTalking</a>
-        <a href="https://fantasy-amap.github.io/fantasy-portrait/" target="_blank"
-          style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyPortrait</a>
-        <a href="https://fantasy-amap.github.io/fantasy-talking2/" target="_blank"
-          style="display:block; padding:12px 18px; color:#333; text-decoration:none;">FantasyTalking2</a>
       </div>
     </div>
   </div>
   <!-- More research下拉菜单 结束 -->
-  <script>
-    // 简单的下拉菜单JS逻辑
-    const btn = document.getElementById('moreResearchBtn');
-    const menu = document.getElementById('moreResearchDropdown');
-    btn.onclick = function (e) {
-      e.stopPropagation();
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    };
-    // 点击别处隐藏菜单
-    document.body.addEventListener('click', function () {
-      menu.style.display = 'none';
-    });
-  </script>
 
   <title>FantasyWorld: Geometry-Consistent World Modeling via Unified Video and 3D Prediction</title>
 
@@ -74,230 +53,40 @@
   <script src="./static/js/bulma-carousel.min.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
-  <style>
-    /* Dark theme styles */
-    body {
-      background-color: #0a0a0a;
-      color: #ffffff;
-    }
-
-    .title,
-    .subtitle,
-    .content,
-    .publication-title {
-      color: #ffffff !important;
-    }
-
-    .hero.is-light {
-      background-color: #1a1a1a !important;
-      color: #ffffff !important;
-    }
-
-    .section {
-      background-color: #0a0a0a;
-    }
-
-    .footer {
-      background-color: #1a1a1a;
-      color: #ffffff;
-    }
-
-    .content h1,
-    .content h2,
-    .content h3,
-    .content h4,
-    .content h5,
-    .content h6 {
-      color: #ffffff;
-    }
-
-    pre {
-      background-color: #1a1a1a;
-      color: #ffffff;
-    }
-
-    code {
-      background-color: #2a2a2a;
-      color: #ffffff;
-    }
-
-    .has-text-justified {
-      color: #ffffff;
-    }
-
-    .hero {
-      margin-top: 10rem;
-      background-color: #0a0a0a !important;
-    }
-
-    .hero-transparent {
-      position: relative;
-      z-index: 2;
-      margin-top: 0vh;
-      background-color: transparent !important;
-    }
-
-    .hero,
-    .hero-body,
-    .hero.is-small {
-      background-color: #0a0a0a !important;
-    }
-
-    html {
-      background-color: #0a0a0a !important;
-    }
-
-    .column-spacing {
-      margin: 0 2rem !important;
-    }
-
-    .video-description {
-      min-height: 4.5em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
-
-    .prompt-wrap {
-      position: relative;
-    }
-
-    .prompt {
-      max-width: calc(100% - 20px);
-      position: absolute;
-      background: rgba(0, 0, 0, 0.1);
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 12px;
-      backdrop-filter: blur(10px);
-      bottom: 10px;
-      left: 10px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      z-index: 10;
-      line-height: 1.4;
-
-    }
-
-    .prompt-wrap:hover .prompt {
-      opacity: 1;
-      pointer-events: all;
-    }
-  </style>
-
-  <style>
-    .carousel {
-      display: flex;
-      gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-      /* Firefox */
-      -ms-overflow-style: none;
-      /* IE and Edge */
-      font-size: 0;
-      /* Remove any potential inline-block spacing */
-    }
-
-    .carousel::-webkit-scrollbar {
-      display: none;
-      /* Chrome, Safari, Opera */
-    }
-
-    .prompt-wrap-main {
-      flex: 0 0 auto;
-      height: 180px;
-      position: relative;
-      font-size: 16px;
-      /* Reset font size for content */
-      display: flex;
-      /* Use flexbox to center the video */
-      justify-content: center;
-      /* Center horizontally */
-      align-items: center;
-      /* Center vertically */
-    }
-
-    .prompt-wrap-main video {
-      height: 100%;
-      width: auto;
-      object-fit: contain;
-      display: block;
-      /* Remove any potential inline spacing */
-      margin: 0;
-      /* Remove any margins */
-    }
-
-    .results-carousel {
-      padding: 0;
-      white-space: nowrap;
-      /* Prevent wrapping */
-    }
-  </style>
 </head>
 
 <body>
+  <section class="hero-transparent hero-landing">
+    <div class="container is-max-desktop hero-shell">
+      <div class="hero-stack has-text-centered">
+        <h1 class="title is-1 publication-title hero-title">FantasyWorld</h1>
+        <p class="subtitle hero-subtitle">Geometry-Consistent World Modeling via Unified Video and 3D Prediction</p>
 
-  <section class="hero-transparent">
-    <div class="column has-text-centered" style="margin-top: 0rem; ">
-      <h1 class="title is-1 publication-title mb-1"
-        style="background: transparent !important; text-shadow: 0px 0px 15px rgba(255, 255, 255, 0.8); color: white;">
-        FantasyWorld</h1>
-      <h2 class="subtitle has-text-centered mt-1" style="background: transparent !important; color: white;">
-        Geometry-Consistent World Modeling via Unified Video and 3D Prediction</h2>
-
-      <div class="is-size-5 publication-authors" style="background: transparent !important; ">
-        <span class="author-block" style="background: transparent !important;">
-          Yixiang Dai<sup style="color: rgb(255, 255, 255);">1*§&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
-        </span>
-        <span class="author-block" style="background: transparent !important;">
-          Fan Jiang<sup style="color: white;">1*†‡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
-        </span>
-        <span class="author-block" style="background: transparent !important;">
-          Chiyu Wang<sup style="color: white;">1*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
-        </span>
-
-
-        <div class="is-size-5 publication-authors" style="background: transparent !important;">
-          <span class="author-block" style="background: transparent !important;">
-            Mu Xu<sup style="color: white;">2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</sup>
-          </span>
-          <span class="author-block" style="background: transparent !important;">
-            YongGang Qi<sup style="color: white;">2‡&nbsp;&nbsp;</sup>
-          </span>
+        <div class="publication-authors">
+          <div class="hero-authors">
+            <span class="author-block">Yixiang Dai<sup>1*§</sup></span>
+            <span class="author-block"><a href="https://frankjiang.github.io/" target="_blank">Fan
+                Jiang</a><sup>1*†‡</sup></span>
+            <span class="author-block">Chiyu Wang<sup>1*</sup></span>
+          </div>
+          <div class="hero-authors">
+            <span class="author-block">Mu Xu<sup>2</sup></span>
+            <span class="author-block">YongGang Qi<sup>2‡</sup></span>
+          </div>
         </div>
-      </div>
 
+        <div class="publication-authors hero-affiliations">
+          <span class="author-block"><sup>1</sup>AMAP, Alibaba Group</span>
+          <span class="author-block"><sup>2</sup>Beijing University of Posts and Telecommunications</span>
+        </div>
 
+        <div class="publication-authors hero-notes">
+          <span class="author-block"><sup>*</sup>Equal contribution</span>
+          <span class="author-block"><sup>†</sup>Project leader</span>
+          <span class="author-block"><sup>‡</sup>Corresponding author</span>
+          <span class="author-block"><sup>§</sup>Work done during internship at AMAP, Alibaba Group</span>
+        </div>
 
-      <div class="is-size-5 publication-authors" style="background: transparent !important;">
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">1</sup>AMAP,&nbsp;&nbsp;&nbsp;Alibaba Group</span><br>
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">2</sup>Beijing University of Posts and Telecommunications</span><br>
-      </div>
-
-      <div class="is-size-5 publication-authors" style="background: transparent !important;">
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">*</sup>Equal contribution&nbsp;&nbsp;</span>
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">†</sup>Project leader&nbsp;&nbsp;</span>
-
-      </div>
-
-      <div class="is-size-5 publication-authors" style="background: transparent !important;">
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">‡</sup>Corresponding author&nbsp;&nbsp;</span>
-        <span class="author-block" style="background: transparent !important; color: white;"><sup
-            style="color: white;">§</sup>Work done during internship at AMAP, Alibaba Group&nbsp;&nbsp;</span>
-
-      </div>
-      <div class="column has-text-centered">
         <div class="publication-links">
           <!-- PDF Link. -->
           <!-- todo: add paper url and code url   -->
@@ -321,44 +110,38 @@
           </span>
         </div>
       </div>
+    </div>
   </section>
 
 
-  <section class="section" style="margin-top: 10rem;">
+  <section class="section section-intro">
     <div class="container is-max-desktop">
-      <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <div class="video-container">
         <!-- todo:need add youtube url   -->
-        <iframe src="https://www.youtube.com/embed/_gLKZL5ytEo" title="YouTube video player"
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" frameborder="0"
+        <iframe src="https://www.youtube.com/embed/_gLKZL5ytEo" title="YouTube video player" frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
+          allowfullscreen></iframe>
       </div>
-      <div class="columns is-centered has-text-centered" style="margin-top: 30px;">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Abstract </h2>
-        </div>
-      </div>
-      <div class="columns is-vcentered" style="margin-top: 3rem;">
-        <div class="content has-text-justified">
-          <p>
-            High-quality 3D world models are pivotal for embodied intelligence and Artificial General Intelligence
-            (AGI), underpinning applications such as AR/VR content creation and robotic navigation. Despite the
-            established strong imaginative priors, current video foundation models lack explicit 3D grounding
-            capabilities, thus being limited in both spatial consistency and their utility for downstream 3D reasoning
-            tasks. In this work, we present FantasyWorld, a geometry-enhanced framework that augments frozen video
-            foundation models with a trainable geometric branch, enabling joint modeling of video latents and an
-            implicit 3D field in a single forward pass. Our approach introduces cross-branch supervision, where geometry
-            cues guide video generation and video priors regularize 3D prediction, thus yielding consistent and
-            generalizable 3D-aware video representations. Notably, the resulting latents from the geometric branch can
-            potentially serve as versatile representations for downstream 3D tasks such as novel view synthesis and
-            navigation, without requiring per-scene optimization or fine-tuning. Extensive experiments show that
-            FantasyWorld effectively bridges video imagination and 3D perception, outperforming recent
-            geometry-consistent baselines in multi-view coherence and style consistency. Ablation studies further
-            confirm that these gains stem from the unified backbone and cross-branch information exchange.
-            <!-- <a href="https://www.hedra.com/">https://www.hedra.com/</a>, with examples at 
-            <a href="https://magicinfinite.github.io/">https://magicinfinite.github.io/</a>. -->
-          </p>
+      <div class="columns is-vcentered columns-offset-lg">
+        <div class="column is-full-width">
+          <div class="content has-text-justified">
+            <p>
+              High-quality 3D world models are pivotal for embodied intelligence and Artificial General Intelligence
+              (AGI), underpinning applications such as AR/VR content creation and robotic navigation. Despite the
+              established strong imaginative priors, current video foundation models lack explicit 3D grounding
+              capabilities, thus being limited in both spatial consistency and their utility for downstream 3D reasoning
+              tasks. In this work, we present FantasyWorld, a geometry-enhanced framework that augments frozen video
+              foundation models with a trainable geometric branch, enabling joint modeling of video latents and an
+              implicit 3D field in a single forward pass. Our approach introduces cross-branch supervision, where
+              geometry cues guide video generation and video priors regularize 3D prediction, thus yielding consistent
+              and generalizable 3D-aware video representations. Notably, the resulting latents from the geometric branch
+              can potentially serve as versatile representations for downstream 3D tasks such as novel view synthesis
+              and navigation, without requiring per-scene optimization or fine-tuning. Extensive experiments show that
+              FantasyWorld effectively bridges video imagination and 3D perception, outperforming recent
+              geometry-consistent baselines in multi-view coherence and style consistency. Ablation studies further
+              confirm that these gains stem from the unified backbone and cross-branch information exchange.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -366,174 +149,127 @@
 
 
   <section class="section">
-    <div class="container is-max-desktop" style="margin-top: -6rem;">
-      <div class="columns is-centered has-text-centered" style="margin-top: 100px;">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Overview </h2>
-          <div class="container" style="max-width: 100%; margin-top: 60px">
-            <img src="./assets/overview.png" alt="Full Body">
-            <!-- <div id="results-carousel" class="carousel results-carousel"> -->
-            <!-- <div class="item item-fullbody"> -->
-            <!-- <img src="./static/arxiv_method.jpg" alt="Full Body"> -->
-            <!-- </div> -->
-            <!--  -->
-            <!-- </div> -->
-          </div>
-        </div>
+    <div class="container is-max-desktop section-title-tight">
+      <h2 class="title is-3">Overview</h2>
+      <div class="container container-wide">
+        <img class="overview-image" src="./assets/overview.png" alt="Full Body">
       </div>
-      <div class="columns is-vcentered" style="margin-top: 3rem;">
-        <div class="content has-text-justified">
-          <p>
-            FantasyWorld is a unified feed-forward model for joint video and 3D scene generation. The front end employs
-            Preconditioning Blocks (PCBs) that reuse the frozen
-            WanDiT denoiser to supply partially denoised latents, ensuring the geometry pathway operates on meaningful
-            features rather than pure noise. The backbone then consists of stacked Integrated Reconstruction and
-            Generation (IRG) Blocks, which iteratively refine video latents and geometry fea-
-            tures under multimodal conditioning. Each IRG block contains an asymmetric dual-branch structure: an
-            Imagination Prior Branch for appearance synthesis and a Geometry-Consistent
-            Branch for explicit 3D reasoning, coupled through lightweight adapters and cross attention.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <style>
-    #results-carousel {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .prompt-wrap {
-      width: 50%;
-      /* 设置每个视频占总宽度的32%，以确保每行显示3个 */
-      margin-bottom: 1rem;
-      /* 设置每行视频之间的间距 */
-    }
-
-    video {
-      width: 100%;
-      /* 视频占满父容器的宽度 */
-      height: auto;
-      /* 保持视频的原始比例 */
-    }
-  </style>
-
-  <section class="section">
-    <div class="hero-body">
-      <!-- <div class="container" style="max-width: 50%;"> -->
-      <div class="columns is-centered has-text-centered">
-        <div class="container is-max-desktop">
-          <h2 class="title is-3">Our Results</h2>
-          <!-- <p> FantasyWorld can generate explorable and geometrically consistent 3D scenes by integrating video priors and geometric grounding.  </p> -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- <div class="container" style="max-width: 60%;"> -->
-  <div class="container is-max-desktop">
-    <div class="hero-body" style="margin-top: 1rem;">
-      <div class="container" style="max-width: 100%;">
-        <!-- <video poster="" autoplay controls muted loop playsinline> -->
-        <!-- <source src="./static/magic_human_video/long_video/case1.mp4" -->
-        <!-- type="video/mp4"> -->
-        <!-- </video> -->
-        <!-- <h3 class="title is-4"></h3>  -->
-        <div id="results-carousel" class="results-carousel" style="margin-top: -1.3rem;">
-          <div class="prompt-wrap">
-            <!-- <video poster="" controls muted loop playsinline> -->
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_1.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <!-- <video poster="" controls muted loop playsinline> -->
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_1.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_2.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_2.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_5.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_5.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_6.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_6.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_8.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_8.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/video_9.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div>
-          <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/fantasyworld/pc_9.mp4" type="video/mp4">
-            </video>
-            <div class="prompt"></div>
+      <div class="columns is-vcentered columns-offset-md">
+        <div class="column is-full-width">
+          <div class="content has-text-justified">
+            <p>
+              FantasyWorld is a unified feed-forward model for joint video and 3D scene generation. The front end
+              employs
+              Preconditioning Blocks (PCBs) that reuse the frozen WanDiT denoiser to supply partially denoised latents,
+              ensuring the geometry pathway operates on meaningful features rather than pure noise. The backbone then
+              consists of stacked Integrated Reconstruction and Generation (IRG) Blocks, which iteratively refine video
+              latents and geometry features under multimodal conditioning. Each IRG block contains an asymmetric
+              dual-branch structure: an Imagination Prior Branch for appearance synthesis and a Geometry-Consistent
+              Branch for explicit 3D reasoning, coupled through lightweight adapters and cross attention.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </section>
 
   <section class="section">
     <div class="hero-body">
-      <!-- <div class="container" style="max-width: 50%;"> -->
-      <div class="columns is-centered has-text-centered">
-        <div class="container is-max-desktop">
-          <h2 class="title is-3">Comparison</h2>
-          <p> Our experiments show that the generated videos not only maintain strong visual realism but also achieve
-            higher multi-view coherence and improved geometric fidelity compared to existing methods. </p>
+      <div class="container is-max-desktop section-title-flat">
+        <h2 class="title is-3">Our Results</h2>
+      </div>
+    </div>
+    <div class="container is-max-desktop">
+      <div class="hero-body section-body-tight">
+        <div class="container container-wide">
+          <div id="results-carousel" class="results-carousel results-offset-tight">
+            <div class="prompt-wrap">
+              <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_1.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <!-- <video poster="" controls muted loop playsinline> -->
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_1.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_2.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_2.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_5.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_5.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_6.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_6.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_8.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_8.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/video_9.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+            <div class="prompt-wrap">
+              <video poster="" autoplay controls muted loop playsinline>
+                <source src="./assets/fantasyworld/pc_9.mp4" type="video/mp4">
+              </video>
+              <div class="prompt"></div>
+            </div>
+          </div>
         </div>
+      </div>
+  </section>
+
+  <section class="section">
+    <div class="hero-body">
+      <div class="container is-max-desktop section-title-tight">
+        <h2 class="title is-3">Comparison</h2>
+        <p> Our experiments show that the generated videos not only maintain strong visual realism but also achieve
+          higher multi-view coherence and improved geometric fidelity compared to existing methods. </p>
       </div>
     </div>
   </section>
@@ -980,28 +716,25 @@
 
   <section class="section">
     <div class="hero-body">
-      <!-- <div class="container" style="max-width: 50%;"> -->
-      <div class="columns is-centered has-text-centered">
-        <div class="container is-max-desktop">
-          <h2 class="title is-3">Our Results on Large Viewpoint Variations</h2>
-          <p> FantasyWorld maintains multi-view consistency across significant viewpoint variations (e.g., 180-degree
-            rotations).
-          </p>
-        </div>
+      <div class="container is-max-desktop section-title-tight">
+        <h2 class="title is-3">Our Results on Large Viewpoint Variations</h2>
+        <p> FantasyWorld maintains multi-view consistency across significant viewpoint variations (e.g., 180-degree
+          rotations).
+        </p>
       </div>
     </div>
   </section>
 
   <!-- <div class="container" style="max-width: 60%;"> -->
 
-  <div class="hero-body" style="margin-top: 1rem;">
-    <div class="container" style="max-width: 100%;">
+  <div class="hero-body section-body-tight">
+    <div class="container container-wide">
       <!-- <video poster="" autoplay controls muted loop playsinline> -->
       <!-- <source src="./static/magic_human_video/long_video/case1.mp4" -->
       <!-- type="video/mp4"> -->
       <!-- </video> -->
       <!-- <h3 class="title is-4"></h3>  -->
-      <div id="results-carousel2" class="results-carousel2" style="margin-top: -1.3rem;">
+      <div id="results-carousel2" class="results-carousel2 results-offset-tight">
         <div class="prompt-wrap2">
           <!-- <video poster="" controls muted loop playsinline> -->
           <video poster="" autoplay controls muted loop playsinline>
@@ -1059,30 +792,8 @@
           <div class="prompt"></div>
         </div>
 
-        <!-- <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/25.mp4"
-                      type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div> -->
-
-        <!-- <div class="prompt-wrap">
-            <video poster="" autoplay controls muted loop playsinline>
-              <source src="./assets/28.mp4"
-                      type="video/mp4">
-            </video>
-            <div class="prompt"></div>
-          </div> -->
-
       </div>
     </div>
-    <!-- <div class="container" style="max-width: 80%;"> -->
-    <!-- <h3 class="title is-4"></h3>  -->
-    <!-- <div id="results-carousel" class="carousel results-carousel" style="margin-top: -1.3rem;"> -->
-    <!--  -->
-    <!-- </div> -->
-    <!-- </div> -->
 
 
   </div>
@@ -1101,6 +812,13 @@
     </div>
   </section>
 
+  <script src="./static/js/more-research.js"></script>
+  <script>
+    loadMoreResearchDropdown({
+      mountId: "moreResearchDropdown",
+      jsonUrl: "https://raw.githubusercontent.com/Fantasy-AMAP/.github/refs/heads/main/profile/research.json"
+    });
+  </script>
 </body>
 
 </html>
