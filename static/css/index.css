@@ -705,7 +705,7 @@ video {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #f0f0f0;
+  background-color: var(--bg-0);
   padding: 10px;
   box-sizing: border-box;
 }
@@ -720,8 +720,8 @@ video {
   width: 100%;
   margin: 0;
   padding: 5px;
-  background-color: #f0f0f0;
-  color: #000;
+  background-color: var(--bg-0);
+  color: #f0f0f0;;
   font-size: 1rem;
   box-sizing: border-box;
   text-align: center;
@@ -884,6 +884,7 @@ video {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  background-color: var(--bg-0);
 }
 
 .video-item {
@@ -900,6 +901,8 @@ video {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
+  border: none;
+  outline: none;
 }
 
 
@@ -917,7 +920,7 @@ video {
   max-width: 100%;
   object-fit: contain;
   padding: 0 16.5%;
-  background-color: #333;
+  background-color: var(--bg-0);
   border-radius: 8px;
 }
 
