@@ -1,9 +1,0 @@
-{
-    "DIODE": {
-        "path": "data/eval/DIODE",
-        "width": 1024,
-        "height": 768,
-        "split": ".index.txt",
-        "include_segmentation": true
-    }
-}

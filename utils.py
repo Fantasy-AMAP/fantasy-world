@@ -1,9 +1,7 @@
-# Copyright Alibaba Inc. All Rights Reserved.
-
 from pathlib import Path
 import struct
-from Fantasyworld.vggt.utils.pose_enc import pose_encoding_to_extri_intri
-from Fantasyworld.vggt.utils.geometry import closed_form_inverse_se3
+from FantasyWorld.vggt.utils.pose_enc import pose_encoding_to_extri_intri
+from FantasyWorld.vggt.utils.geometry import closed_form_inverse_se3
 import math
 import os
 
@@ -13,6 +11,7 @@ from PIL import Image
 import PIL
 
 import torch
+
 os.environ["OPENCV_IO_ENABLE_OPENEXR"] = "1"
 
 try:
@@ -24,18 +23,16 @@ except AttributeError:
 
 
 def crop_image_depth_and_intrinsic_by_pp(
-        image,
-        depth_map,
-        intrinsic,
-        target_shape,
-        track=None,
-        filepath=None,
-        strict=False,
-        conf_map=None):
+    image,
+    depth_map,
+    intrinsic,
+    target_shape,
+    track=None,
+    filepath=None,
+    strict=False,
+    conf_map=None,
+):
     """
-    TODO: some names of width and height seem not consistent. Need to check.
-
-
     Crops the given image and depth map around the camera's principal point, as defined by `intrinsic`.
     Specifically:
       - Ensures that the crop is centered on (cx, cy).
@@ -91,8 +88,8 @@ def crop_image_depth_and_intrinsic_by_pp(
         raise AssertionError(error_message)
 
     # Identify principal point (cx, cy) from intrinsic
-    cx = (intrinsic[1, 2])
-    cy = (intrinsic[0, 2])
+    cx = intrinsic[1, 2]
+    cy = intrinsic[0, 2]
     # Compute how far we can crop in each direction
     if strict:
         half_x = min((target_shape[0] / 2), cx)
@@ -188,14 +185,13 @@ def normalize_scene(
 
     first_cam_extrinsic_inv = closed_form_inverse_se3(extrinsics_homog[:, 0])
     new_extrinsics = torch.matmul(
-        extrinsics_homog,
-        first_cam_extrinsic_inv.unsqueeze(1))  # (B,N,4,4)
+        extrinsics_homog, first_cam_extrinsic_inv.unsqueeze(1)
+    )  # (B,N,4,4)
 
     R = extrinsics[:, 0, :3, :3]
     t = extrinsics[:, 0, :3, 3]
     first_moge_world = first_moge_world.to(torch.float32)
-    first_moge_world = (first_moge_world @ R.transpose(-1, -2).unsqueeze(
-        1).unsqueeze(2)) + t.unsqueeze(1).unsqueeze(2).unsqueeze(3)
+    first_moge_world = (first_moge_world @ R.transpose(-1, -2).unsqueeze(1).unsqueeze(2)) + t.unsqueeze(1).unsqueeze(2).unsqueeze(3)
 
     point_masks = first_moge_mask.to(torch.bool).to(first_moge_world.device)
     final_mask = torch.zeros_like(point_masks)
@@ -203,17 +199,13 @@ def normalize_scene(
     valid_dists = dist[point_masks]
     if valid_dists.numel() > 0:
         outlier_threshold = torch.quantile(valid_dists, 0.95)
-        final_mask = point_masks & (
-            dist <= outlier_threshold).to(
-            point_masks.dtype).to(
-            point_masks.device)
+        final_mask = point_masks & (dist <= outlier_threshold).to(point_masks.dtype).to(point_masks.device)
 
     dist_sum = (dist * final_mask).sum(dim=[1, 2, 3])
     valid_count = final_mask.sum(dim=[1, 2, 3])
     avg_scale = (dist_sum / (valid_count + 1e-3)).clamp(min=1e-6, max=1e6)
 
-    new_extrinsics[:, :, :3, 3] = new_extrinsics[:,
-                                                 :, :3, 3] / avg_scale.view(-1, 1, 1)
+    new_extrinsics[:, :, :3, 3] = new_extrinsics[:, :, :3, 3] / avg_scale.view(-1, 1, 1)
 
     return new_extrinsics
 
@@ -248,18 +240,14 @@ def batch_depth_to_world(prediction, extrinsics, intrinsics):
     Returns:
         tuple: (world_points, masks)
     """
-    prediction["depth"][torch.isinf(
-        prediction["depth"]) | torch.isnan(prediction["depth"])] = 0
+    prediction["depth"][torch.isinf(prediction["depth"]) | torch.isnan(prediction["depth"])] = 0
     depths = prediction["depth"].unsqueeze(0).cpu().numpy()
     extrinsics = extrinsics.cpu().numpy()
     intrinsics = intrinsics.cpu().numpy()
     world_points_all = []
     masks_all = []
     for f in range(depths.shape[0]):
-
-        wp, _, mask = depth_to_world_coords_points(
-            depths[f], extrinsics[f], intrinsics[f]
-        )
+        wp, _, mask = depth_to_world_coords_points(depths[f], extrinsics[f], intrinsics[f])
         world_points_all.append(wp)
         masks_all.append(mask)
 
@@ -279,12 +267,14 @@ def save_video_imageio(frames_np, output_path, fps=16):
     """
     try:
         import imageio
+
         imageio.mimwrite(
             str(output_path),
             frames_np,
             fps=fps,
             quality=8,
-            macro_block_size=1)
+            macro_block_size=1,
+        )
         print(f"[OK] Method 5 (imageio): Saved to {output_path}")
     except Exception as e:
         print(f"[FAIL] Method 5 (imageio) failed: {e}")
@@ -297,10 +287,9 @@ def resize_by_short_side_and_update_intrinsics(
     short_side_target,
     track=None,
     pixel_center=True,
-    conf_map=None
+    conf_map=None,
 ):
     long_side_target = short_side_target * 592.0 / 336.0
-    # -----------------------
 
     original_h, original_w = image.shape[:2]
     if original_h > original_w:
@@ -346,8 +335,10 @@ def resize_by_short_side_and_update_intrinsics(
         intrinsic[1, 2] -= 0.5
 
     if depth_map is not None:
-        assert image.shape[:2] == depth_map.shape[:2], \
-            f"Resized image shape {image.shape[:2]} does not match depth shape {depth_map.shape[:2]}"
+        assert image.shape[:2] == depth_map.shape[:2], (
+            f"Resized image shape {image.shape[:2]} "
+            f"does not match depth shape {depth_map.shape[:2]}"
+        )
 
     return image, depth_map, intrinsic, track, conf_map
 
@@ -419,11 +410,10 @@ def resize_image_depth_and_intrinsic(
     # Convert image to PIL for resizing
     image = Image.fromarray(image)
     input_resolution = np.array(image.size)
-    output_resolution = np.floor(
-        input_resolution *
-        max_resize_scale).astype(int)
-    image = image.resize(tuple(output_resolution),
-                         resample=lanczos if max_resize_scale < 1 else bicubic)
+    output_resolution = np.floor(input_resolution * max_resize_scale).astype(int)
+    image = image.resize(
+        tuple(output_resolution), resample=lanczos if max_resize_scale < 1 else bicubic
+    )
     image = np.array(image)
 
     if depth_map is not None:
@@ -496,13 +486,11 @@ def threshold_depth_map(
 
     # Percentile-based thresholds
     depth_max_thres = (
-        np.nanpercentile(
-            depth_map,
-            max_percentile) if max_percentile > 0 else None)
+        np.nanpercentile(depth_map, max_percentile) if max_percentile > 0 else None
+    )
     depth_min_thres = (
-        np.nanpercentile(
-            depth_map,
-            min_percentile) if min_percentile > 0 else None)
+        np.nanpercentile(depth_map, min_percentile) if min_percentile > 0 else None
+    )
 
     # Apply the thresholds if they are > 0
     if depth_max_thres is not None and depth_max_thres > 0:
@@ -558,17 +546,13 @@ def depth_to_world_coords_points(
     t_cam_to_world = cam_to_world_extrinsic[:3, 3]
 
     # Apply the rotation and translation to the camera coordinates
-    world_coords_points = (
-        np.dot(cam_coords_points, R_cam_to_world.T) + t_cam_to_world
-    )  # HxWx3, 3x3 -> HxWx3
+    world_coords_points = np.dot(cam_coords_points, R_cam_to_world.T) + t_cam_to_world
     # world_coords_points = np.einsum("ij,hwj->hwi", R_cam_to_world, cam_coords_points) + t_cam_to_world
 
     return world_coords_points, cam_coords_points, point_mask
 
 
-def depth_to_cam_coords_points(
-    depth_map: np.ndarray, intrinsic: np.ndarray
-) -> np.ndarray:
+def depth_to_cam_coords_points(depth_map: np.ndarray, intrinsic: np.ndarray) -> np.ndarray:
     """
     Unprojects a depth map into camera coordinates, returning (H, W, 3).
 
@@ -588,9 +572,7 @@ def depth_to_cam_coords_points(
     """
     H, W = depth_map.shape
     assert intrinsic.shape == (3, 3), "Intrinsic matrix must be 3x3"
-    assert (
-        intrinsic[0, 1] == 0 and intrinsic[1, 0] == 0
-    ), "Intrinsic matrix must have zero skew"
+    assert intrinsic[0, 1] == 0 and intrinsic[1, 0] == 0, "Intrinsic matrix must have zero skew"
 
     fu, fv = intrinsic[0, 0], intrinsic[1, 1]
     cu, cv = intrinsic[0, 2], intrinsic[1, 2]
@@ -647,14 +629,15 @@ def rotate_90_degrees(
 
     # Rotate the image and depth map
     rotated_image, rotated_depth_map = rotate_image_and_depth_rot90(
-        image, depth_map, clockwise)
+        image, depth_map, clockwise
+    )
     # Adjust the intrinsic matrix
     new_intri_opencv = adjust_intrinsic_matrix_rot90(
-        intri_opencv, image_width, image_height, clockwise)
+        intri_opencv, image_width, image_height, clockwise
+    )
 
     if track is not None:
-        new_track = adjust_track_rot90(
-            track, image_width, image_height, clockwise)
+        new_track = adjust_track_rot90(track, image_width, image_height, clockwise)
     else:
         new_track = None
 
@@ -689,15 +672,13 @@ def rotate_image_and_depth_rot90(image, depth_map, clockwise):
     """
     rotated_depth_map = None
     if clockwise:
-        rotated_image = np.transpose(
-            image, (1, 0, 2))  # Transpose height and width
+        rotated_image = np.transpose(image, (1, 0, 2))  # Transpose height and width
         rotated_image = np.flip(rotated_image, axis=1)  # Flip horizontally
         if depth_map is not None:
             rotated_depth_map = np.transpose(depth_map, (1, 0))
             rotated_depth_map = np.flip(rotated_depth_map, axis=1)
     else:
-        rotated_image = np.transpose(
-            image, (1, 0, 2))  # Transpose height and width
+        rotated_image = np.transpose(image, (1, 0, 2))  # Transpose height and width
         rotated_image = np.flip(rotated_image, axis=0)  # Flip vertically
         if depth_map is not None:
             rotated_depth_map = np.transpose(depth_map, (1, 0))
@@ -728,17 +709,9 @@ def adjust_extrinsic_matrix_rot90(extri_opencv, clockwise):
     t = extri_opencv[:, 3]
 
     if clockwise:
-        R_rotation = np.array([
-            [0, -1, 0],
-            [1, 0, 0],
-            [0, 0, 1]
-        ])
+        R_rotation = np.array([[0, -1, 0], [1, 0, 0], [0, 0, 1]])
     else:
-        R_rotation = np.array([
-            [0, 1, 0],
-            [-1, 0, 0],
-            [0, 0, 1]
-        ])
+        R_rotation = np.array([[0, 1, 0], [-1, 0, 0], [0, 0, 1]])
 
     new_R = np.dot(R_rotation, R)
     new_t = np.dot(R_rotation, t)
@@ -747,10 +720,11 @@ def adjust_extrinsic_matrix_rot90(extri_opencv, clockwise):
 
 
 def adjust_intrinsic_matrix_rot90(
-        intri_opencv,
-        image_width,
-        image_height,
-        clockwise):
+    intri_opencv,
+    image_width,
+    image_height,
+    clockwise,
+):
     """
     Adjusts the intrinsic matrix (3x3) for a 90-degree rotation of the image in the image plane.
 
@@ -810,12 +784,10 @@ def adjust_track_rot90(track, image_width, image_height, clockwise):
     """
     if clockwise:
         # (x, y) -> (y, image_width - 1 - x)
-        new_track = np.stack(
-            (track[:, 1], image_width - 1 - track[:, 0]), axis=-1)
+        new_track = np.stack((track[:, 1], image_width - 1 - track[:, 0]), axis=-1)
     else:
         # (x, y) -> (image_height - 1 - y, x)
-        new_track = np.stack(
-            (image_height - 1 - track[:, 1], track[:, 0]), axis=-1)
+        new_track = np.stack((image_height - 1 - track[:, 1], track[:, 0]), axis=-1)
 
     return new_track
 
@@ -912,10 +884,12 @@ def load_16big_png_depth(depth_png: str) -> np.ndarray:
     with Image.open(depth_png) as depth_pil:
         depth = (
             np.frombuffer(
-                np.array(
-                    depth_pil, dtype=np.uint16), dtype=np.float16) .astype(
-                np.float32) .reshape(
-                    (depth_pil.size[1], depth_pil.size[0])))
+                np.array(depth_pil, dtype=np.uint16),
+                dtype=np.float16,
+            )
+            .astype(np.float32)
+            .reshape((depth_pil.size[1], depth_pil.size[0]))
+        )
     return depth
 
 
@@ -941,7 +915,7 @@ class Camera:
         self.c2w_mat = np.linalg.inv(w2c_mat_4x4)
 
 
-def _infer_intrinsics(data, image_size=None, K=None):
+def _infer_intrinsics(data, image_size, K=None):
     """
     Infer camera intrinsics from data or provided matrix.
 
@@ -958,10 +932,7 @@ def _infer_intrinsics(data, image_size=None, K=None):
         cx, cy = float(K[0, 2]), float(K[1, 2])
         return fx, fy, cx, cy
     fx = fy = float(data.get("focal_length", 500))
-    if image_size is None:
-        H, W = 336, 592
-    else:
-        H, W = image_size
+    H, W = image_size
     cx, cy = (W - 1) / 2.0, (H - 1) / 2.0
     return fx, fy, cx, cy
 
@@ -979,7 +950,7 @@ def cameras_json_to_camera_list(data, image_size=None, K=None):
         list: List of Camera objects
     """
     fx, fy, cx, cy = _infer_intrinsics(data, image_size=image_size, K=K)
-    mats = data['cameras_interp']
+    mats = data["cameras_interp"]
 
     cam_list = []
     for idx, c2w in enumerate(mats):
@@ -1002,14 +973,14 @@ def _to_uint8_colors(colors):
 
 
 def save_colored_pointcloud_ply(
-        points,
-        colors,
-        out_path,
-        stride=1,
-        max_points=None,
-        valid_mask=None, 
-        save_first_frame=True):
-
+    points,
+    colors,
+    out_path,
+    stride=1,
+    max_points=None,
+    valid_mask=None,
+    save_first_frame=True,
+):
     assert points.ndim == 4 and points.shape[-1] == 3, "points should be in the shape of [F,H,W,3]"
     assert colors.shape == points.shape, "colors should has the same size as points"
     F, H, W, _ = points.shape
@@ -1041,26 +1012,27 @@ def save_colored_pointcloud_ply(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     num_vertices = pts.shape[0]
 
-    header = "\n".join([
-        "ply",
-        "format binary_little_endian 1.0",
-        f"element vertex {num_vertices}",
-        "property float x",
-        "property float y",
-        "property float z",
-        "property uchar red",
-        "property uchar green",
-        "property uchar blue",
-        "end_header\n"
-    ]).encode("ascii")
+    header = "\n".join(
+        [
+            "ply",
+            "format binary_little_endian 1.0",
+            f"element vertex {num_vertices}",
+            "property float x",
+            "property float y",
+            "property float z",
+            "property uchar red",
+            "property uchar green",
+            "property uchar blue",
+            "end_header\n",
+        ]
+    ).encode("ascii")
 
     with open(out_path, "wb") as f:
         f.write(header)
-        for (
-            x, y, z), (r, g, b) in zip(
-            pts.astype(
-                np.float32), cols.astype(
-                np.uint8)):
+        for (x, y, z), (r, g, b) in zip(
+            pts.astype(np.float32),
+            cols.astype(np.uint8),
+        ):
             f.write(
                 struct.pack(
                     "<fffBBB",
@@ -1069,7 +1041,9 @@ def save_colored_pointcloud_ply(
                     float(z),
                     int(r),
                     int(g),
-                    int(b)))
+                    int(b),
+                )
+            )
 
 
 def get_pointclouds(prediction, fix_first_frame=False):
@@ -1084,14 +1058,13 @@ def get_pointclouds(prediction, fix_first_frame=False):
     intrinsic = intrinsic[0].to(torch.float32).cpu().numpy()
     depths = prediction["depth"][0].squeeze(-1).cpu().numpy()  # [F,H,W]
     if fix_first_frame:
-        extrinsic[0, 0] = np.eye(3, 4)
+        extrinsic[0] = np.eye(3, 4)
 
     recon_worldpoints = []
     for f in range(F):
-        wp, _, mask = depth_to_world_coords_points(
-            depths[f], extrinsic[f], intrinsic[f]
-        )
+        wp, _, mask = depth_to_world_coords_points(depths[f], extrinsic[f], intrinsic[f])
         recon_worldpoints.append(wp)
     recon_worldpoints = np.stack(recon_worldpoints)  # [F,H,W,3]
 
     return recon_worldpoints
+
