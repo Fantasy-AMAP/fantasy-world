@@ -66,17 +66,17 @@ pip install thirdparty/utils3d/
 | Wan2.1-I2V-14B-480P  |      🤗 [Huggingface](https://huggingface.co/Wan-AI/Wan2.1-I2V-14B-480P)    🤖 [ModelScope](https://www.modelscope.cn/models/Wan-AI/Wan2.1-I2V-14B-480P)     | Base Model
 | FantasyWorld-Wan2.1-I2V-14B-480P      |   🤗 [Huggingface](https://huggingface.co/acvlab/FantasyWorld-Wan2.1-I2V-14B-480P)    🤖 [ModelScope](https://www.modelscope.cn/models/amap_cvlab/FantasyWorld-Wan2.1-I2V-14B-480P)    | FantasyWorld
 
-Download models using `huggingface-cli`:
-``` sh
-pip install "huggingface_hub"
-huggingface-cli download "Wan-AI/Wan2.1-I2V-14B-480P" --local-dir ./models/Wan-AI/Wan2.1-I2V-14B-480P
-huggingface-cli download "acvlab/FantasyWorld-Wan2.1-I2V-14B-480P" --local-dir ./models/FantasyWorld-Wan2.1-I2V-14B-480P/
+Download models using `huggingface`:
+```bash
+pip install -U "huggingface_hub"
+hf download "Wan-AI/Wan2.1-I2V-14B-480P" --local-dir ./models/Wan-AI/Wan2.1-I2V-14B-480P
+hf download "acvlab/FantasyWorld-Wan2.1-I2V-14B-480P" --local-dir ./models/FantasyWorld-Wan2.1-I2V-14B-480P/
 ```
 
-Download models using `modelscope-cli`:
+Download models using `modelscope`:
 ```bash
-pip install modelscope
-modelscope download Wan-AI/Wan2.1-I2V-14B-480P --local_dir ./models/Wan-AI/Wan2.1-I2V-14B-480P
+pip install -U modelscope
+modelscope download "Wan-AI/Wan2.1-I2V-14B-480P" --local_dir ./models/Wan-AI/Wan2.1-I2V-14B-480P
 modelscope download "amap_cvlab/FantasyWorld-Wan2.1-I2V-14B-480P" --local_dir ./models/FantasyWorld-Wan2.1-I2V-14B-480P/
 ```
 
@@ -113,19 +113,19 @@ python inference_wan21.py \
 | Wan2.2-Fun-Reward-LoRAs      |   🤗 [Huggingface](https://huggingface.co/alibaba-pai/Wan2.2-Fun-Reward-LoRAs)    🤖 [ModelScope](https://www.modelscope.ai/models/PAI/Wan2.2-Fun-Reward-LoRAs)    | LoRA Model
 | FantasyWorld-Wan2.2-Fun-A14B-Control-Camera      |   🤗 [Huggingface](https://huggingface.co/acvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera)   🤖 [ModelScope](https://www.modelscope.ai/models/amap_cvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera)    | FantasyWorld
 
-Download models using `huggingface-cli`:
+Download models using `huggingface`:
 ```bash
-pip install "huggingface_hub"
-huggingface-cli download "alibaba-pai/Wan2.2-Fun-A14B-Control-Camera" --local-dir ./models/PAI/Wan2.2-Fun-A14B-Control-Camera
-huggingface-cli download "alibaba-pai/Wan2.2-Fun-Reward-LoRAs" --local-dir ./models/PAI/Wan2.2-Fun-Reward-LoRAs
-huggingface-cli download "acvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera" --local-dir ./models/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera/
+pip install -U "huggingface_hub"
+hf download "alibaba-pai/Wan2.2-Fun-A14B-Control-Camera" --local-dir ./models/PAI/Wan2.2-Fun-A14B-Control-Camera
+hf download "alibaba-pai/Wan2.2-Fun-Reward-LoRAs" --local-dir ./models/PAI/Wan2.2-Fun-Reward-LoRAs
+hf download "acvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera" --local-dir ./models/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera/
 ```
 
-Download models using modelscope-cli:
+Download models using `modelscope`:
 ```bash
-pip install modelscope
-modelscope download --model "PAI/Wan2.2-Fun-A14B-Control-Camera" --local_dir ./models/PAI/Wan2.2-Fun-A14B-Control-Camera
-modelscope download --model "PAI/Wan2.2-Fun-Reward-LoRAs" --local_dir ./models/PAI/Wan2.2-Fun-Reward-LoRAs
+pip install -U modelscope
+modelscope download "PAI/Wan2.2-Fun-A14B-Control-Camera" --local_dir ./models/PAI/Wan2.2-Fun-A14B-Control-Camera
+modelscope download "PAI/Wan2.2-Fun-Reward-LoRAs" --local_dir ./models/PAI/Wan2.2-Fun-Reward-LoRAs
 modelscope download "amap_cvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera" --local_dir ./models/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera/
 ```
 
