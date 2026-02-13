@@ -21,13 +21,13 @@
 
 ![Overview](assets/overview.png)
 
-FantasyWorld 是一个用于联合视频和 3D 场景生成的统一前馈模型。其前端采用**预条件化模块 (Preconditioning Blocks, PCBs)**，通过复用冻结的 WanDiT 去噪器来提供部分去噪的隐变量，确保几何路径在有意义的特征上而非纯噪声上进行操作。骨干网络由堆叠的**重建生成一体化模块 (Integrated Reconstruction and Generation, IRG) 块**组成，在多模态条件下迭代优化视频隐变量和几何特征。每个 IRG 模块包含一个非对称的双分支结构：用于外观合成的**想象先验分支 (Imagination Prior Branch)** 和用于显式 3D 推理的**几何一致性分支 (Geometry-Consistent Branch)**，两者通过轻量级适配器和交叉注意力机制进行耦合。
+FantasyWorld 是一个用于联合视频和 3D 场景生成的统一前馈模型。其前端采用**预调节模块 (Preconditioning Blocks, PCBs)**，通过复用冻结的 WanDiT 去噪器来提供部分去噪的隐变量，确保几何路径在有意义的特征上而非纯噪声上进行操作。骨干网络由堆叠的**重建生成一体化模块 (Integrated Reconstruction and Generation, IRG) 块**组成，在多模态条件下迭代优化视频隐变量和几何特征。每个 IRG 模块包含一个非对称的双分支结构：用于外观合成的**想象先验分支 (Imagination Prior Branch)** 和用于显式 3D 推理的**几何一致性分支 (Geometry-Consistent Branch)**，两者通过轻量级适配器和交叉注意力机制进行耦合。
 
 ### 🚀 训练策略
 
-FantasyWorld 利用稳健的**两阶段训练策略**来实现视频与 3D 的联合生成：
+FantasyWorld 利用一种稳健的**两阶段训练策略**来实现视频与 3D 的联合生成：
 
-- **阶段 1 (几何预训练)：** 利用 VGGT 风格的模型，对深度、点和相机轨迹进行精确估计。
+- **阶段 1 (几何预训练)：** 利用 VGGT 风格的模型，对深度、点云和相机轨迹进行精确估计。
 - **阶段 2 (联合生成)：** 一个统一的模型，无缝集成了阶段 1 的几何骨干网络与 Wan 视频生成流程。
 
 ### 📦 模型库
