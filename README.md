@@ -7,8 +7,8 @@
 [![Code](https://img.shields.io/badge/Code-GitHub-181717.svg?logo=GitHub)](https://github.com/Fantasy-AMAP/fantasy-world.git)
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Wan2.1-FFD21E)](https://huggingface.co/acvlab/FantasyWorld-Wan2.1-I2V-14B-480P)
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Wan2.2-FFD21E)](https://huggingface.co/acvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera)
-[![ModelScope](https://img.shields.io/badge/ModelScope-Wan2.1-624AFF)](https://modelscope.cn/amap_cvlab/FantasyWorld-Wan2.1-I2V-14B-480P)
-[![ModelScope](https://img.shields.io/badge/ModelScope-Wan2.2-624AFF)](https://modelscope.cn/amap_cvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera)
+[![ModelScope](https://img.shields.io/badge/👾%20ModelScope-Wan2.1-624AFF)](https://modelscope.cn/amap_cvlab/FantasyWorld-Wan2.1-I2V-14B-480P)
+[![ModelScope](https://img.shields.io/badge/👾%20ModelScope-Wan2.2-624AFF)](https://modelscope.cn/amap_cvlab/FantasyWorld-Wan2.2-Fun-A14B-Control-Camera)
 
 
 
